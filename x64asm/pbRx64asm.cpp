@@ -54,7 +54,6 @@ int main()
     yy = random64(buf2064);
     printf("0x%016llX\n", yy);
 #endif
-    yy++;
 
 #endif
     return 0;
