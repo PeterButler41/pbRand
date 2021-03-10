@@ -30,7 +30,7 @@ public:
 
     pbRand() {};  // no constructor for our base class
 
-virtual void init(void)=0;  //setup mix tbl
+virtual void reInit(void)=0;  //[re]setup mix tbl
 virtual void clr(void)=0;
 virtual void print(void)=0;
 

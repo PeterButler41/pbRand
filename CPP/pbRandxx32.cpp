@@ -142,8 +142,10 @@ void pbRandXX32::seedList(const void *src, int nBytes)
     }
     if (nBytes)
     {
+        signed int m = 0xFF000000;
+        m >>= (3-nBytes)*8;
         seed_t temp = *p32;
-        temp <<= 4*(4-nBytes); //shift out bytes not specified
+        temp &= ~m;
         seedItem32(temp);
     }
 }

@@ -6,6 +6,7 @@ unsigned int buf2032[22]; // the other 10 are the seed words
 unsigned long long buf1064[11]; //one long long for flist
 unsigned long long buf2064[21]; //others are seed words
 
+const char abc[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 uint64_t outData[1000];
 
 void print1032(void)
@@ -35,6 +36,7 @@ int main()
     seedCstring(buf2032, "ABC");
     zz = random32(buf2032);
     printf("0x%08X\n", zz);
+    seedList(buf2032,abc,14);
 
 //#else
 
@@ -44,6 +46,7 @@ int main()
     //print2064();
     yy = random64(buf2064);
     printf("0x%016llX\n", yy);
+    seedList(buf2064, abc, 14);
     //print2064();
 #if 1
 //    seedItem32(buf2064, isA);

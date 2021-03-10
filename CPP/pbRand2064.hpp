@@ -22,7 +22,7 @@ pbRand2064()
     seedItem64(0x87654321);
 }
 
-void init();  //setup mix tbl
+void reInit();  //setup mix tbl
 void clr(void);  // zeros seed table
 void print(void); //prints seed array for debug
 

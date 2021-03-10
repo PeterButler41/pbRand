@@ -89,6 +89,7 @@ _32seedList:
         jbe     exit            ;nop if count .LE. zero
 SLa:
         mov     edx,[adrsReg]
+        add     adrsReg,4
         cmp     cntReg,3
         jbe     SLb             ;if seeding last fraction
         call    funcReg
@@ -102,7 +103,7 @@ SLb:
         xor     eax,eax         ;all zero bits
         not     eax             ;all one bits
         mov     ecx,cntReg      ;remaining count...
-        shl     cl,2            ;...times 4
+        shl     cl,3            ;...times 8
         shr     eax,cl          ;make mask
         and     edx,eax         ;zap bytes we dont want
         call    funcReg

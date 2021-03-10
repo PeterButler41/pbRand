@@ -15,7 +15,7 @@ void pbRand1032::clr(void)
     for (int i = 0; i < 10; i++) seed[i] = 0;
 }
 
-void pbRand1032::init(void)
+void pbRand1032::reInit(void)
 {
     //printf("pbRand1032::init(void)");
     clr();

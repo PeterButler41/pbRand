@@ -22,7 +22,7 @@ public:
         seedItem32(0x4321);
     }
 
-    void init(void);  //setup mix tbl
+    void reInit(void);  //[re]setup mix tbl
     void clr(void);  // zeros seed table
     void print(void); //prints seed array for debug
 

@@ -93,7 +93,7 @@ sLsta   cmp     r6,#4
         b       sLsta
 ;less than 4 bytes left
 sLstb   ldr     r1,[r5]         ;load last word
-        lsl     r6,r6,#8 ;remaing count*8 is num of bits to discard
+        lsl     r6,r6,#3 ;remaing count*8 is num of bits to discard
         lsl     r1,r1,r6 ;discard bytes out of range
         lsr     r1,r1,r6        ;make it look like unused bytes weer zero
         bl      seedItem32

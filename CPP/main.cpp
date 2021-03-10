@@ -3,6 +3,8 @@
 #include "pbRand2032.hpp"
 #include "pbRand2064.hpp"
 
+char stuff[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
 void the32(pbRand *p)
 {
     uint32_t asdf = p->random32();
@@ -10,6 +12,7 @@ void the32(pbRand *p)
     p->seedCstring("ABC");
     uint32_t pp = p->random32();
     printf("0x%08X\n", pp);
+    p->seedList(stuff,9);
 }
 
 void the64(pbRand *q)
@@ -19,8 +22,8 @@ void the64(pbRand *q)
     q->seedCstring("ABC");
     uint64_t qq = q->random64();
     printf("0x%016llX\n", qq);
+    q->seedList(stuff,11);
 }
-
 int main()
 {
     printf("Pure C++ on ARM sim\n");
