@@ -6,7 +6,7 @@ unsigned int buf2032[21];
 unsigned long long buf1064[11];
 unsigned long long buf2064[21];
 
-
+char stuff[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 int main()
 {
     uint64_t zz;
@@ -20,6 +20,8 @@ int main()
     yy = random32(buf2032);
     printf("0x%08X\n", yy);
     
+    seedList(buf2032,stuff,14);
+    
     printf("asmARM 2064\n");
     init2064(buf2064);
     zz = random64(buf2064);
@@ -27,6 +29,8 @@ int main()
     seedCstring(buf2064, "ABC");
     zz = random64(buf2064);
     printf("0x%016llX\n", zz);
+
+    seedList(buf2064,stuff,10);
 
     yy++;
     zz++;

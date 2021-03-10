@@ -13,7 +13,7 @@ void pbRand2064::clr(void)
     for (int i = 0; i < 20; i++) seed[i] = 0;
 }
 
-void pbRand2064::init(void)
+void pbRand2064::reInit(void)
 {
     //printf("pbRand2064::init(void)");
     clr();
@@ -87,7 +87,7 @@ seed_t pbRand2064::random64(void)
     //printf("Pre/Post t0 %016llX  ",t0);
     t0 = rol(t0,  1);
     //printf(" %016llX\n",t0);
-    
+
     //printf("Pre/Post t1 %016llX  ",t1);
     t1 = rol(t1, 21);
     //printf(" %016llX\n",t1);

@@ -14,7 +14,7 @@ void pbRand1064::clr(void)
     for (int i = 0; i < 10; i++) seed[i] = 0;
 }
 
-void pbRand1064::init(void)
+void pbRand1064::reInit(void)
 {
     //printf("pbRand1064::init(void)");
     clr();
