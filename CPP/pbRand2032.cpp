@@ -15,7 +15,7 @@ void pbRand2032::clr(void)
     for (int i = 0; i < 20; i++) seed[i] = 0;
 }
 
-void pbRand2032::init(void)
+void pbRand2032::reInit(void)
 {
     //printf("pbRand2032::init(void)");
     clr();
