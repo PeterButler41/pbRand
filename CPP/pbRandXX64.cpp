@@ -111,7 +111,9 @@ void pbRandXX64::seedList(const void *src, int nBytes)
     if (nBytes)
     {
         seed_t temp = *p64;
-        temp <<= 8*(8-nBytes); //shift out bytes not specified
+        signed long long m = 0xFF00000000000000;
+        m >>= (7-nBytes)*8;
+        temp &= ~m; 
         seedItem64(temp);
     }
 
