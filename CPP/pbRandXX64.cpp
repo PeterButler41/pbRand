@@ -113,10 +113,9 @@ void pbRandXX64::seedList(const void *src, int nBytes)
         seed_t temp = *p64;
         signed long long m = 0xFF00000000000000;
         m >>= (7-nBytes)*8;
-        temp &= ~m; 
+        temp &= ~m;
         seedItem64(temp);
     }
-
 }
 
 // end whatever
