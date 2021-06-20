@@ -62,7 +62,7 @@ random: ;tbl (rsi} is set to seed[0] and is never changed
         rol     BBB,rotB
         add     AAA,BBB
         mov     CCC,[rdx+seedSize*2] ;t2
-
+ ifdef USE_XOR_SHIFT
 ; in place of a silple t2 rol and add or xor...
 ; t2^= t2>>15; t2^= t2<<13; t2^= t2>>28;
 
@@ -75,6 +75,9 @@ random: ;tbl (rsi} is set to seed[0] and is never changed
         mov     temp,CCC
         shr     temp,28
         xor     CCC,temp        ;t2^= t2>>28
+ else
+        rol     CCC,rotC
+ endif
 ;and finally...
         xor     rax,CCC
         ret

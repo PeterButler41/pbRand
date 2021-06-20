@@ -87,12 +87,16 @@ seed_t pbRand1064::random64(void)
     //printf("Pre %016llX\n",t2);
     t0 = rol(t0,  1);
     t1 = rol(t1, 21);
+#ifdef USE_XOR_RAND    
     t2 ^= t2 >> 15;
     //printf("(1) %016llX\n",t2);
     t2 ^= t2 << 13;
     //printf("(2) %016llX\n",t2);
     t2 ^= t2 >> 28;
     //printf("(3) %016llX\n",t2);
+#else
+    t2 = rol(t2, 42);
+#endif
     t2 = (t0 + t1) ^ t2;
     //printf("1064 random returns %016llX\n", t2);
     return t2;

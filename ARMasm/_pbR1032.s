@@ -17,7 +17,7 @@ init1032
         str     r1,[r0]         ;post fList to buffer
         movs    r1,#0
         movs    r2,#0
-        adds    r3,r0,#4        ;advance past fList adrs
+        adds    r3,r0,#8        ;advance past fList adrs
         stm     r3!,{r1,r2}
         stm     r3!,{r1,r2}
         stm     r3!,{r1,r2}
@@ -42,11 +42,11 @@ mixMac  macro   AA,BB,CC,DD,idx
         str     DD,[tbl,#4*idx]
         endm
 
-;r0 = adrs of fList,seed[0],seed[1] ... seed[max]
+;r0 = adrs of fList,not used,seed[0],seed[1] ... seed[max]
 ;r0 is never changed
 mix
         push    {r4-r5,lr}
-        adds    tbl,r0,#4       ;pass over fList to tbl
+        adds    tbl,r0,#8       ;pass over fList to tbl
         ldm     tbl!,{AA,BB,CC}
         subs    tbl,tbl,#3*4      ;&seed[2] --> &seed[0]
         mixMac  AA,BB,CC,DD,3
@@ -63,12 +63,12 @@ mix
 
 
 
-;r0 = adrs of fList,seed[0],seed[1] ... seed[max]
+;r0 = adrs of fList,notUsed,seed[0],seed[1] ... seed[max]
 ;r0 is never changed (thus calling mix is easy)
 ;r1 is the 32-bit seed
 seed
         push    {r4-r5,lr}
-        adds    r2,r0,#4           ;r2 = &seed[0]
+        adds    r2,r0,#8           ;r2 = &seed[0] +0 is fList, +4 not used
         ldm     r2,{r3,r4,r5}      ;seed[0]..seed[2]
         add     r3,r3,r1,ror#32-1  ;seed[0]
         add     r4,r4,r1,ror#32-12 ;seed[1]
@@ -82,7 +82,7 @@ seed
 random
         push    {tbl,lr}
         bl      mix
-        adds    tbl,r0,#4       ;offset past fList
+        adds    tbl,r0,#8       ;offset past fList
         ldr     r1,[tbl,#4*9]   ;seed[9]
         ands    r1,r1,#7        ;mask
 ;the part below could be common 14 bytes for 32-bit
@@ -92,12 +92,14 @@ random
 
         rors    r0,r0,#32-1        ;r0 rol 1
         add     r0,r0,r1,ror#32-12 ;r0 += r1 rol 12
-
+#ifdef USE_XOR_RAND
         eor     r2,r2,r2,lsr#11 ;r2 >>= 11
         eor     r2,r2,r2,lsl#17 ;r2 <<= 17
         eor     r2,r2,r2,lsr#13 ;r2 >>= 13
-;                               return (r0+r1)^r2;
-        eors    r0,r0,r2
+        eors    r0,r0,r2           ;return (r0+r1)^r2_as_changed_above
+#else                              
+        eors    r0,r0,r2,ror#32-21 ;return (r0+r1)^r2_rotated_left_21_bits
+#endif
         pop     {tbl,pc}
 
 ; this belongs in _pbRxx32

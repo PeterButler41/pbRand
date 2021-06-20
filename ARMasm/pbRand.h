@@ -34,7 +34,7 @@ void init2064(void*); // uint64_t seedArray[21]; 108 bytes
 
 // UTILITY FUNCTIONS
 void init(void*); //zero seedArray then seed with default seed
-void mix(void*, int count=1);
+void mix(void*, int count); // count=10 in C++ version
 
 // RETURN RANDOM VALUES
 uint64_t random32(void*);

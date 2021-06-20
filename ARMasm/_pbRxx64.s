@@ -27,7 +27,7 @@ ofs_seedSelf     equ 12
 ofs_mix          equ 16  ;only one mix() via fList
 ofs_random64     equ 20
 ofs_random32     equ 24
-ofs_seedList64   equ 28
+ofs_seedList64    equ 28
 ofs_seedList32   equ 32
 ofs_seedList     equ 36      ;   byte count - best way
 ofs_randomList64 equ 40
@@ -68,7 +68,7 @@ _pbR64seedHead
         lsrs    Atemp,sVhi,#32-20
         lsls    sVhi,sVhi,#20
         eor     sVhi,sVhi,sVlo,lsr#32-20
-        eor     sVlo,Atemp,sVlo,lsl#20  
+        eor     sVlo,Atemp,sVlo,lsl#20
 
 ; add rotated sVal to seed[1]
         ldrd    r5,r6,[r0,#16]   ;load seed[1]
@@ -81,7 +81,7 @@ _pbR64seedHead
         lsrs    Atemp,sVhi,#32-21
         lsls    sVhi,sVhi,#21
         eor     sVhi,sVhi,sVlo,lsr#32-21
-        eor     sVlo,Atemp,sVlo,lsl#21  
+        eor     sVlo,Atemp,sVlo,lsl#21
 
 ; add sVal to seed[2]
         ldrd    r5,r6,[r0,#24]   ;load seed[2]
@@ -133,17 +133,12 @@ _pbR64randTail
         lsrs    TEMP,t1hi,#32-21
         lsls    t1hi,t1hi,#21
         eor     t1hi,t1hi,t1lo,lsr#32-21
-        eor     t1lo,TEMP,t1lo,lsl#21  
+        eor     t1lo,TEMP,t1lo,lsl#21
+; add the rotated values
+        adds    t0lo,t0lo,t1lo
+        adcs    t0hi,t0hi,t1hi
 
-#if 0
-
-        lsls    Btemp,t1hi,#32-20; bbb000
-        lsls    Atemp,t1lo,#32-20; ddd000
-        lsrs    t1hi,t1hi,#20    ; 000aaa
-        lsrs    t1lo,t1lo,#20    ; 000ccc
-        eors    t1hi,t1hi,Atemp; ; dddaaa
-        eors    t1lo,t1lo,Btemp; ; bbbccc
-#endif
+#ifdef USE_XOR_SHIFT
 ; for t2 we map t2 into t2 as follows:
 ;t2 ^= t2 >> 15; t2 ^= t2 << 13; t2 ^= t2 > 28;
 
@@ -162,7 +157,7 @@ _pbR64randTail
         eor     t2hi,t2hi,t2hi,lsl#13 ; aaabbb^bbb000
         eor     t2lo,t2lo,t2lo,lsl#13 ; cccddd^ddd000
         eors    t2hi,t2hi,TEMP        ; aaabbb^000ccc
- 
+
         ;                   start       aaabbb cccddd
         ;         wanted xor with       000aaa bbbccc
 ; t2 ^= t2 >> 28;
@@ -171,12 +166,25 @@ _pbR64randTail
         eor     t2lo,t2lo,t2lo,lsr#28 ; cccddd^000ccc
         eors    t2lo,t2lo,TEMP        ; cccddd^000ccc^bbb000
 
-; then finally return (t0+t1)^t2
-        adds    t0lo,t0lo,t1lo
-        adcs    t0hi,t0hi,t1hi
+; then finally return  r0:r1 = (t0+t1)^t2
         eors    t0lo,t0lo,t2lo
         eors    t0hi,t0hi,t2hi
-
+#else
+;resuming what we had before if useXorShift...
+;
+; we simply rotate t2 left 42 bits and xor with the sum performed
+;  before the if xor_shift thing
+; EXCEPT we are using a 32-bit CPU so...
+;  ...we rotate left 10 bits and get the other 32 bits by
+;     xoing top to botton and bottom to top
+        lsrs    TEMP,t2hi,#32-10
+        lsls    t2hi,t2hi,#10
+        eor     t2hi,t2hi,t2lo,lsr#32-10
+        eor     t2lo,TEMP,t2lo,lsl#10
+; and now the backwards xor to return r0:r1
+        eors    t0lo,t0lo,t2hi
+        eors    t0hi,t0hi,t2lo
+#endif
         bx      lr
 
 ;=============================================
@@ -203,9 +211,11 @@ mix
 
 _pbR64seedSelf
         push    {r4,lr}
-        mov     r4,r0
-        bl      random
-        mov     r0,r4
+        mov     r4,r0       ;save fList adrs
+        bl      random      ;low:high is r0:r1
+        mov     r2,r1       ;high...
+        mov     r1,r0       ;...low for seed function
+        mov     r0,r4       ;fList needed to dispatcg
         bl      seed
         pop     {r4,pc}
 

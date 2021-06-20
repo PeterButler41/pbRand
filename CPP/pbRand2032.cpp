@@ -88,11 +88,13 @@ seed_t pbRand2032::random32(void)
     seed_t t2 = seed[ix + 2];
     t0 = rol(t0, 1);
     t1 = rol(t1, 12);
-
+#ifdef USE_XOR_RAND
     t2 ^= t2 >> 11;
     t2 ^= t2 << 17;
     t2 ^= t2 >> 13;
-
+#else
+    t2 = rol(t2, 21);
+#endif
     t2 = (t0 + t1) ^ t2;
     //printf("2032 random returns %08X\n", t2);
     return t2;

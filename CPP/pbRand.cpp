@@ -52,7 +52,7 @@ void pbRand::seedCstring(const char *str) //seed char’s with null terminated C-s
     }
 }
 
-void pbRand::mix(int nTimes) //no default value
+void pbRand::mix(int nTimes) //default value is 10 in C++
 {
     while (nTimes--) mx();
 }

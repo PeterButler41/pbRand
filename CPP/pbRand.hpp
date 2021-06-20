@@ -34,7 +34,11 @@ virtual void reInit(void)=0;  //[re]setup mix tbl
 virtual void clr(void)=0;
 virtual void print(void)=0;
 
-        void mix(int n=10);         //do a mix nTimes
+#ifdef __cplusplus
+void mix(int n=10);         //do a mix nTimes
+#else
+void mix(int);              // no default value in C
+#endif
 virtual void mx(void)=0;            //do one mix
 
 // RETURN RANDOM VALUES

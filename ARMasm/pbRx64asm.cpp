@@ -35,43 +35,47 @@ uint32_t isB = 'B' * 33 * 33;
 uint32_t isC = 'C' * 33 * 33;
 
 int main()
-{ 
+{
     uint32_t zz;
     uint64_t yy;
-    
+
     printf("1032  ARM asm\n");
-    
+
     init1032(buf1032);
+    seedSelf(buf1032);
     zz = random32(buf1032);
     printf("0x%08X\n", zz);
-    seedCstring(buf1032, "ABC");
+//    seedCstring(buf1032, "ABC");
     zz = random32(buf1032);
     printf("0x%08X\n", zz);
 
     printf("1064  ARM asm\n");
- 
+
     init1064(buf1064);
+    seedSelf(buf1064);
     yy = random64(buf1064);
     printf("0x%016llX\n", yy);
-    seedCstring(buf1064, "ABC");
+//    seedCstring(buf1064, "ABC");
     yy = random64(buf1064);
     printf("0x%016llX\n", yy);
 
     printf("2032  ARM asm\n");
-    
+
     init2032(buf2032);
+    seedSelf(buf2032);
     zz = random32(buf2032);
     printf("0x%08X\n", zz);
-    seedCstring(buf2032, "ABC");
+//    seedCstring(buf2032, "ABC");
     zz = random32(buf2032);
     printf("0x%08X\n", zz);
 
     printf("2064  ARM asm\n");
-    
+
     init2064(buf2064);
+    seedSelf(buf2064);
     yy = random64(buf2064);
     printf("0x%016llX\n", yy);
-    seedCstring(buf2064, "ABC");
+//    seedCstring(buf2064, "ABC");
     yy = random64(buf2064);
     printf("0x%016llX\n", yy);
 

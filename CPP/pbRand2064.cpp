@@ -91,7 +91,7 @@ seed_t pbRand2064::random64(void)
     //printf("Pre/Post t1 %016llX  ",t1);
     t1 = rol(t1, 21);
     //printf(" %016llX\n",t1);
-
+#ifdef USE_XOR_RAND
     //printf("Pre %016llX\n",t2);
     t2 ^= t2 >> 15;
     //printf("(1) %016llX\n",t2);
@@ -99,6 +99,9 @@ seed_t pbRand2064::random64(void)
     //printf("(2) %016llX\n",t2);
     t2 ^= t2 >> 28;
     //printf("(3) %016llX\n",t2);
+#else
+    t2 = rol(t2, 42);
+#endif    
     t2 = (t0 + t1) ^ t2;
     //printf("1064 random returns %016llX\n", t2);
     return t2;

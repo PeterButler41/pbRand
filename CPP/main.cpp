@@ -27,18 +27,41 @@ void the64(pbRand *q)
 int main()
 {
     printf("Pure C++ on ARM sim\n");
-    pbRand *p;
-    pbRand *q;
+    pbRand *pbr;
+    uint32_t r32;
+    uint64_t r64;
    
-    p = new pbRand1032();
-    the32(p);
-    q = new pbRand1064();
-    the64(q);
+    printf("1032...\n");
+    pbr = new pbRand1032();
+    pbr->seedSelf();
+    r32 = pbr->random32();
+    printf("0x%08X\n", r32);
+    r32 = pbr->random32();
+    printf("0x%08X\n", r32);
+    
+    printf("1064...\n");
+    pbr = new pbRand1064();
+    pbr->seedSelf();
+    r64 = pbr->random64();
+    printf("0x%016llX\n", r64);
+    r64 = pbr->random64();
+    printf("0x%016llX\n", r64);
+  
+    printf("2032...\n");
+    pbr = new pbRand2032();
+    pbr->seedSelf();
+    r32 = pbr->random32();
+    printf("0x%08X\n", r32);
+    r32 = pbr->random32();
+    printf("0x%08X\n", r32);
+
+    printf("2064...\n");
+    pbr = new pbRand2064();
+    pbr->seedSelf();
+    r64 = pbr->random64();
+    printf("0x%016llX\n", r64);
+    r64 = pbr->random64();
+    printf("0x%016llX\n", r64);
    
-    p = new pbRand2032();
-    the32(p);
-    q = new pbRand2064();
-    the64(q);
- 
     return 0;
 }
